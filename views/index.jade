@@ -1,0 +1,106 @@
+extends layout
+
+block body
+	#mainContainer
+
+	#teaser
+		.teaser
+			h1 Привет,
+			p остротерра – это сервис который убьет туроператоров. 
+			p Остротерра умеет:
+			ul
+				li создавать туры на лету
+				li
+					span подбирать лучшие варианты, подходящие под твой бюджет – 
+					i скоро
+				li 
+					span опрашивать много отличных поставщиков отелей и авиабилетов – 
+					i 
+						span сейчас 
+						a(href="http://www.ostrovok.ru/") ostrovok.ru 
+						span и 
+						a(href="http://eviterra.com/") eviterra.com
+						span , скоро и другие
+				li дарить ультра-свежесть real-time веба: node.js, socket.io, mongodb, coffeescript – модно, молодежно, современно
+				li 
+					span возвращать часть комиссии обратно – покупать через остротерру выгоднее, чем у поставщиков – 
+					i скоро
+
+			p 
+				span Следи за обновлениями, пиши на 
+				a(href="mailto:s@ostroterra.com") s@ostroterra.com
+
+
+	#loading(style="display: none")
+		.center
+			img(src="http://cutecoregifs.com/gifs/Pokemon/cancanpika.gif")
+
+	div(class="row dest-item")
+		#addItem(class="span6")
+			div(class="plus") 
+				p ❖
+		.span8
+
+	div(id="searchRowTemplate", style="display: none")
+		div(class="row dest-item")
+			
+			div(class="shadow span6")
+				.image
+					div
+						input.geo_autocomplete(type='text')
+					div
+						input.calendar(type='text')
+			.span6
+				div(style="display: none", class="stats shadow")
+					
+
+		.row
+			div(class="shadow span6", style="display: none")
+				div(class="results flights")
+
+			div(class="shadow span6", style="display: none")
+				div(class="results hotels")
+
+	#stats(style="display:none")
+		.inner-stats
+			h1 Варианты путешествия
+			p дешевый 
+				span.cheep 
+				span.rur &nbsp;&#8399;
+			p средний 
+				span.average 
+				span.rur &nbsp;&#8399;
+			p цена/качество 		
+				span.bestValue 
+				span.rur &nbsp;&#8399;
+			p лучший 
+				span.best
+				span.rur &nbsp;&#8399; 
+
+	#hotelItem(style="display:none")
+		.match
+			.price 
+				div(class="btn-group btn-group-vertical")
+					a(href='%url%', class="btn btn-small btn-success", target="_blank") 
+						span Купить за %price% 
+						span.rur &#8399;
+					span(class="btn btn-small disabled") %description%
+			
+			div(class="description centered")
+				.hotel %name% 
+				.stars %stars%
+
+	#flightItem(style="display:none")
+		.match
+			.price 
+				div(class="btn-group btn-group-vertical")
+					a(href='%url%', class="btn btn-small btn-success", target="_blank") 
+						span Купить за %price% 
+						span.rur &#8399;
+					span(class="btn btn-small disabled") %description%
+			
+			.description 
+				div Вся дорога ~ %timeSpan%
+				div %transferNumber%
+				div Прибывает %arrival%
+		
