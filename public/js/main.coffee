@@ -241,10 +241,10 @@ class SearchRow
     cheepest    = _.min         @flightsCollection,  (elem) -> elem.price
     cheepest.description    = 'самый дешевый'
 
-    fastest     = _.min         @flightsCollection,  (elem) -> elem.timeSpan
+    fastest     = _.max         @flightsCollection,  (elem) -> elem.rating
     fastest.description     = 'самый быстрый'
 
-    bestValue   = _.min _.filter(@flightsCollection,  (elem) -> elem.price <= 1.2 * (cheepest.price + fastest.price) / 2), (elem) -> elem.timeSpan
+    bestValue   = _.max _.filter(@flightsCollection,  (elem) -> elem.price <= 1.2 * (cheepest.price + fastest.price) / 2), (elem) -> elem.rating
     bestValue.description   = 'цена/качество'
 
     average     = _.min _.filter(@flightsCollection, (elem) -> elem != cheepest),   (elem) -> elem.price
@@ -286,6 +286,12 @@ class SearchRow
     @flights.parent().fadeIn(200)
     @flights.empty()
     @flightsCollection = @flightsCollection.concat flights
+
+    minSpan = _.min(@flightsCollection, (elem) -> elem.timeSpan).timeSpan
+
+    for flight in @flightsCollection
+      flight.rating = minSpan / flight.timeSpan
+
     @displayFlights()
 
   setBackground: (term) ->

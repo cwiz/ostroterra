@@ -227,14 +227,14 @@
         return elem.price;
       });
       cheepest.description = 'самый дешевый';
-      fastest = _.min(this.flightsCollection, function(elem) {
-        return elem.timeSpan;
+      fastest = _.max(this.flightsCollection, function(elem) {
+        return elem.rating;
       });
       fastest.description = 'самый быстрый';
-      bestValue = _.min(_.filter(this.flightsCollection, function(elem) {
+      bestValue = _.max(_.filter(this.flightsCollection, function(elem) {
         return elem.price <= 1.2 * (cheepest.price + fastest.price) / 2;
       }), function(elem) {
-        return elem.timeSpan;
+        return elem.rating;
       });
       bestValue.description = 'цена/качество';
       average = _.min(_.filter(this.flightsCollection, function(elem) {
@@ -271,10 +271,19 @@
       return _results;
     };
     SearchRow.prototype.addFlights = function(flights) {
+      var flight, minSpan, _i, _len, _ref;
       this.flights.parent().parent().addClass('dest-item');
       this.flights.parent().fadeIn(200);
       this.flights.empty();
       this.flightsCollection = this.flightsCollection.concat(flights);
+      minSpan = _.min(this.flightsCollection, function(elem) {
+        return elem.timeSpan;
+      }).timeSpan;
+      _ref = this.flightsCollection;
+      for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+        flight = _ref[_i];
+        flight.rating = minSpan / flight.timeSpan;
+      }
       return this.displayFlights();
     };
     SearchRow.prototype.setBackground = function(term) {
