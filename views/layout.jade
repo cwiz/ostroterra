@@ -4,11 +4,7 @@ html(lang="ru")
 		title=  'ostroterra'
 
 		link(rel='stylesheet', href='http://fonts.googleapis.com/css?family=Open+Sans:400,300&subset=latin,cyrillic')
-		link(rel='stylesheet', href='http://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic')
-
-		link(rel='stylesheet', href='/css/bootstrap.min.css')
-		link(rel='stylesheet', href='/css/jquery-ui.css')
-		link(rel='stylesheet', href='/css/main.css')   
+		link(rel='stylesheet', href='/css/build/main.css') 
 
 		script(type="text/javascript")
 			var _gaq = _gaq || [];
@@ -16,20 +12,19 @@ html(lang="ru")
 			_gaq.push(['_trackPageview']);
 
 			(function() {
-				var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
-				ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
-				var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+			var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+			ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+			var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
 			})();
 
-		meta(name="google-site-verification", content="UrJs58M0mmDQ-IF8Z3_-O3H0Egvjf6Th9k7Ea5SbuU4")
+
 
 body
-	div(class="navbar navbar-fixed-top")
+	div(class="navbar navbar-fixed-top", id="navbar")
 		.navbar-inner
 			.container
 				a(class="brand", href='/') 
 					span ostroterra
-					sup alpha
 
 				ul.nav
 					li.links
@@ -42,14 +37,14 @@ body
 						li
 							span.desc туристы &nbsp;
 						li
-							form(class="navbar-form pull-left")
+							div(class="navbar-form pull-left")
 								input(type="text", class="span1 navbarInput", value="2", type="number", min="1", max="5", id="numAdults")
-						li.tearser
+						li
 							span.desc &nbsp; бюджет &nbsp;
-						li.tearser
-							form(class="navbar-form pull-left")
-								input(type="text", class="span2 navbarInput", value="100 000", disabled, style="width: 93px")
-						li.tearser 
+						li
+							div(class="navbar-form pull-left")
+								input(id="maxPrice", step=2000, type="text", class="span2 navbarInput", value="100000", type="number", min="500", max="1000000000")
+						li 
 							span(class="rur desc") &nbsp; &#8399;				
 	
 	.container
@@ -57,12 +52,7 @@ body
 			block body
 	.footer
 
-
 	script(src='http://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js')
-	
-	script(src='/js/underscore.js')
-	script(src='/js/bootstrap.min.js')
-	script(src='/js/date.js')
-	script(src='/js/jquery-ui.js')
+	script(src='/js/bundle.js')
 	script(src='/socket.io/socket.io.js')
-	script(src='/js/main.js')
+	

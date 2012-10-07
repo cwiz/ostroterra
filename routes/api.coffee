@@ -241,7 +241,7 @@ exports.search = (socket) ->
                 stars:  stars
                 price:  price
                 rating: rating
-                url:    'http://ostrovok.ru' + hotel.url + "&utm_source=ostroterra"
+                url:    'http://ostrovok.ru' + hotel.url + "&partner_slug=ostroterra"
 
           socket.emit 'hotels ready'
             hotels:     new_hotels
@@ -285,6 +285,9 @@ exports.search = (socket) ->
 
                 flightTimeSpan   = utcArrivalDate.diff   utcDepartureDate, 'hours'
                   
+                if flightTimeSpan is 0
+                  flightTimeSpan = 1
+
                 new_flights.push
                   arrival:        arrivalDestinationDate.format('LL')
                   departure:      departureOriginDate.format('LL')

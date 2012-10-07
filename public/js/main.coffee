@@ -1,3 +1,11 @@
+# requires
+require './jquery-ui'
+require './bootstrap'
+
+_       = require './underscore'
+utils   = require './utils'
+fiddle  = require './tourfiddle'
+
 #
 # Main shit
 #
@@ -5,7 +13,12 @@
 serp = null
 serpRows = null
 
+
 main = () ->
+
+  # show/hide navbar 
+
+
   
   # defaults
 
@@ -13,29 +26,24 @@ main = () ->
 
   serp = new SocketSERP 
 
-    showStatistics: () ->
-      serpRows.rows[0].showStats()
-      serpRows.calculateStatistics()
-      serpRows.rows[0].showStats()
-      
+    checkSignatue: (signature) ->
+      return (signature is serpRows.currentSignature)
     
     onHotelsReady: (data) ->
-      if not (data.signature is serpRows.currentSignature)
+      if not @checkSignatue(data.signature)
         return
       
-      neededRow = serpRows.rows[data.rowNumber]
-      neededRow.addHotels data.hotels
-      
-      @showStatistics()
+      serpRows.rows[data.rowNumber].addHotels data.hotels
+      serpRows.findBestCombination()
+      serpRows.calculateStatistics()
     
     onFlightsReady: (data) ->
-      if not (data.signature is serpRows.currentSignature)
-        return      
-
-      neededRow = serpRows.rows[data.rowNumber]
-      neededRow.addFlights data.flights
-
-      @showStatistics()
+      if not @checkSignatue(data.signature)
+        return
+      
+      serpRows.rows[data.rowNumber].addFlights data.flights 
+      serpRows.findBestCombination()   
+      serpRows.calculateStatistics()
 
   serpRows  = new SearchRowCollection
   
@@ -47,13 +55,14 @@ main = () ->
   firstRow.autocomplete.attr  'placeholder', 'откуда'
 
   firstRow.showTeaser()
+  firstRow.isFirstRow = true;
 
   # --- 2nd row
-  secondRow = new SearchRow
-  serpRows.push secondRow
+  #secondRow = new SearchRow
+  #serpRows.push secondRow
 
-  secondRow.calendar.attr     'placeholder', 'когда обратно'
-  secondRow.autocomplete.attr 'placeholder', 'куда'
+  #secondRow.calendar.attr     'placeholder', 'когда обратно'
+  #secondRow.autocomplete.attr 'placeholder', 'куда'
   
   # add button
   addRowButton = $(".plus p")
@@ -88,7 +97,7 @@ class SearchRow
     @html = $($("#searchRowTemplate").html())
     @parentElement.append @html
     @html.hide()
-    @html.fadeIn 200
+    @html.fadeIn 500
 
     # Results
     @hotels   = @html.find('.hotels')
@@ -179,49 +188,66 @@ class SearchRow
     @html.find('.stats').parent().prepend($('#teaser').html())
 
   hindTeaser: () ->
-    @html.find('.teaser').fadeOut(200)
+    @html.find('.teaser').fadeOut(500)
+    $("#navbar").fadeIn(1000)
+    $("#ads").fadeIn(1000)
+    $(".plus").fadeIn(1000)
 
   displayHotels: () ->
-    @hindTeaser()
-    renderCollection = []
+    if @hotelsCollection.length is 0
+      return 
 
-    cheepest    = _.min           @hotelsCollection,  (elem) -> elem.price
-    cheepest.description = 'самый дешевый'
-
-    bestRating  = _.max           @hotelsCollection,  (elem) -> elem.weightedRating
+    bestRating  = _.max @hotelsCollection,  (elem) -> elem.weightedRating
     bestRating.description = 'лучший рейтинг'
+    bestRating.class = ''
 
-    average     = _.min _.filter(@hotelsCollection,   (elem) -> elem.price <= (cheepest.price + bestRating.price) / 2), (elem) -> elem.weightedRating
+    cheepest    = _.min @hotelsCollection,  (elem) -> elem.price
+    cheepest.description = 'самый дешевый'
+    cheepest.class = ''
+
+    average     = _.max( _.filter(@hotelsCollection, (elem) -> elem.price <= (cheepest.price + bestRating.price) / 2), (elem) -> elem.weightedRating )
     average.description = 'средний'
+    average.class = ''
 
-    bestValue   = _.max _.filter(@hotelsCollection,   (elem) -> elem.price >= average.price),           (elem) ->  elem.weightedRating / elem.price
+    if @bestVariant?.hotel?
+      bestValue  = @bestVariant.hotel
+    else
+      bestValue   = _.max _.filter(@hotelsCollection, (elem) -> bestRating.price > elem.price), (elem) -> elem.weightedRating / elem.price      
 
     bestValue.description = 'цена/качество'
+    bestValue.class = 'bestValueMatch'
 
     @cheepHotel     = cheepest.price
     @bestHotel      = bestRating.price
     @bestValueHotel = bestValue.price
     @averageHotel   = average.price
 
-    for hotel in _.sortBy([bestRating, cheepest, average, bestValue], (elem) -> elem.price)
+    # presentation shit
 
+    @hindTeaser()
+    @hotels.empty()
+    @hotels.parent().parent().addClass('dest-item')
+    @hotels.parent().fadeIn(1000)
+    @hotels.empty()
+
+    for hotel in _.uniq(_.sortBy([bestRating, cheepest, average, bestValue], (elem) -> elem.price))
       stars = new Array(hotel.stars).join("★")
-
       html = @hotelItemHtml
-        .replace('%price%', addCommas(Math.ceil(hotel.price)))
+        .replace('%price%', utils.addCommas(Math.ceil(hotel.price)))
         .replace('%name%',  hotel.name)
         .replace('%room%',  hotel.room)
         .replace('%stars%', "#{stars}")
         .replace('%url%',   hotel.url)
         .replace('%description%', hotel.description)
+        
+      html = $(html)
+      if hotel.class?
+        html.addClass hotel.class
 
-      @hotels.append $(html)
+      @hotels.append html
 
   addHotels: (hotels) ->
-    @hotels.parent().parent().addClass('dest-item')
-    @hotels.parent().fadeIn(200)
-    @hotels.empty()
-
+    
     for hotel in hotels
       hotel.price = parseFloat(hotel.price)
 
@@ -230,25 +256,32 @@ class SearchRow
     # todo: refactor recalculate rating
     bestRating = _.max(@hotelsCollection, (elem) -> elem.rating).rating
     for hotel in @hotelsCollection
-      hotel.weightedRating = hotel.rating / bestRating
+      hotel.weightedRating = 0.2 * ( (hotel.stars-1) / 5.0) + 0.8 * (hotel.rating / bestRating or 0)
 
-    @displayHotels()
 
   displayFlights: () ->
-    @hindTeaser()
-    renderCollection = []
-
-    cheepest    = _.min         @flightsCollection,  (elem) -> elem.price
-    cheepest.description    = 'самый дешевый'
-
-    fastest     = _.max         @flightsCollection,  (elem) -> elem.rating
+    if @flightsCollection.length is 0
+      return
+    
+    fastest                 = _.max  @flightsCollection,  (elem) -> elem.weightedRating
     fastest.description     = 'самый быстрый'
+    fastest.class           = ''
 
-    bestValue   = _.max _.filter(@flightsCollection,  (elem) -> elem.price <= 1.2 * (cheepest.price + fastest.price) / 2), (elem) -> elem.rating
-    bestValue.description   = 'цена/качество'
+    cheepest                = _.min         @flightsCollection,  (elem) -> elem.price
+    cheepest.description    = 'самый дешевый'
+    cheepest.class          = ''
 
-    average     = _.min _.filter(@flightsCollection, (elem) -> elem != cheepest),   (elem) -> elem.price
+    average                 = _.min _.filter(@flightsCollection, (elem) -> elem != cheepest),   (elem) -> elem.price
     average.description     = 'средний'
+    average.class           = ''
+
+    if @bestVariant?.flight?
+      bestValue   = @bestVariant.flight
+    else
+      bestValue   = _.max _.filter(@flightsCollection, (elem) -> elem.price <= 1.2 * (cheepest.price + fastest.price) / 2), (elem) -> elem.weightedRating
+    
+    bestValue.description   = 'цена/качество'
+    bestValue.class = 'bestValueMatch'
 
     @cheepFlight        = cheepest.price
     @bestFlight         = fastest.price
@@ -259,19 +292,23 @@ class SearchRow
     if flights.length is 1
       flights[0].description = 'единственный'
 
+    # presentation shit
+    @hindTeaser()
+    @flights.empty()
+
     for flight in _.sortBy(flights, (elem) -> elem.price)
 
-      pluralHours     = pluralize(flight.timeSpan, "часов", "час", "часа")
+      pluralHours     = utils.pluralize(flight.timeSpan, "часов", "час", "часа")
       timespanString  = "#{flight.timeSpan} #{pluralHours}"
 
       if flight.transferNumber != 0
-        pluralTransfers = pluralize(flight.transferNumber, "пересадок", "пересадка", "пересадки")
+        pluralTransfers = utils.pluralize(flight.transferNumber, "пересадок", "пересадка", "пересадки")
         transferString  = "#{flight.transferNumber} #{pluralTransfers}"
       else
         transferString  = "Прямой рейс"
 
       html = @flightItemHtml
-        .replace('%price%',           addCommas flight.price)
+        .replace('%price%',           utils.addCommas flight.price)
         .replace('%arrival%',         flight.arrival)
         .replace('%departure%',       flight.departure)
         .replace('%timeSpan%',        timespanString)
@@ -279,20 +316,19 @@ class SearchRow
         .replace('%url%',             flight.url)
         .replace('%description%',     flight.description)
 
-      @flights.append $(html)
+      html = $(html)
+
+      if flight.class?
+        html.addClass flight.class
+
+      @flights.append html
 
   addFlights: (flights) ->   
-    @flights.parent().parent().addClass('dest-item')
-    @flights.parent().fadeIn(200)
-    @flights.empty()
     @flightsCollection = @flightsCollection.concat flights
-
     minSpan = _.min(@flightsCollection, (elem) -> elem.timeSpan).timeSpan
 
     for flight in @flightsCollection
-      flight.rating = minSpan / flight.timeSpan
-
-    @displayFlights()
+      flight.weightedRating = minSpan.toFixed(2) / flight.timeSpan 
 
   setBackground: (term) ->
      that = @
@@ -322,6 +358,14 @@ class SearchRow
 
     @activated = true
 
+    if @isFirstRow? and serpRows.rows.length is 1
+      secondRow = new SearchRow
+      serpRows.push secondRow
+
+      secondRow.calendar.attr     'placeholder', 'когда обратно'
+      secondRow.autocomplete.attr 'placeholder', 'куда'
+
+
     @hotelsCollection = []
     @flightsCollection = []
 
@@ -332,6 +376,7 @@ class SearchRowCollection
   constructor: ->
     @rows = []
     @numAdults = 2
+    @maxPrice  = 100000
     @currentSignature = ''
 
     that = @
@@ -340,13 +385,38 @@ class SearchRowCollection
       that.numAdults = parseInt($("#numAdults").val())
       that.refreshSearch()
 
+    $("#maxPrice").change () ->
+      that.maxPrice = parseInt($("#maxPrice").val())
+      that.findBestCombination()
+      that.calculateStatistics()
+
   push: (row) ->
     rowNumber = @rows.length
     @rows.push row
     row.rowCollectionCallback = (data) => 
       @onRowSelection rowNumber, data
 
+  findBestCombination: () ->
+    
+    blocks = _.map @rows, (elem) -> { 
+      hotels:   elem.hotelsCollection, 
+      flights:  elem.flightsCollection 
+    }
+        
+    bestCandidate = fiddle.findBestCombination blocks, @maxPrice
+
+    i = 0
+    for row in bestCandidate
+      @rows[i].bestVariant = bestCandidate[i]
+      i += 1
+    
+    for row in @rows
+      row.displayFlights()
+      row.displayHotels()
+
   calculateStatistics: () ->
+    @rows[0].showStats()
+
     cheep     = 0.0
     average   = 0.0
     bestValue = 0.0
@@ -358,10 +428,12 @@ class SearchRowCollection
       bestValue += (row.bestValueHotel  + row.bestValueFlight)
       best      += (row.bestHotel       + row.bestFlight)
 
-    @rows[0].html.find('.inner-stats span.cheep'    ).html(addCommas(Math.ceil(cheep)))
-    @rows[0].html.find('.inner-stats span.average'  ).html(addCommas(Math.ceil(average)))
-    @rows[0].html.find('.inner-stats span.bestValue').html(addCommas(Math.ceil(bestValue)))
-    @rows[0].html.find('.inner-stats span.best'     ).html(addCommas(Math.ceil(best)))
+    @rows[0].html.find('.inner-stats span.cheep'    ).html(utils.addCommas(Math.ceil(cheep)))
+    @rows[0].html.find('.inner-stats span.average'  ).html(utils.addCommas(Math.ceil(average)))
+    @rows[0].html.find('.inner-stats span.bestValue').html(utils.addCommas(Math.ceil(bestValue)))
+    @rows[0].html.find('.inner-stats span.best'     ).html(utils.addCommas(Math.ceil(best)))
+
+    @rows[0].showStats()
 
   makeSignature: () ->
     signature = "#{@numAdults}"
@@ -383,6 +455,7 @@ class SearchRowCollection
 
       row.hotelsCollection  = []
       row.flightsCollection = []
+      row.bestVariant       = null
 
     @startSearch()
 
@@ -411,14 +484,31 @@ class SearchRowCollection
           oid:  @rows[i+1].city.oid
           date: @rows[i+1].date
 
+
+      # todo -- refactor
+      @rows[0].hindTeaser()
+
+      @rows[i].flights.parent().fadeIn(1000)
+      @rows[i].flights.parent().parent().addClass('dest-item')
+      
+      @rows[i].hotels.parent().fadeIn(1000)
+      @rows[i].hotels.parent().parent().addClass('dest-item')
+      
+      @rows[i+1].flights.parent().fadeIn(1000)
+      @rows[i+1].flights.parent().parent().addClass('dest-item')
+
+      # end -- todo
+
     if rowNumber >= 1
       @rows[rowNumber-1].showHotelsLoading()
       @rows[rowNumber-1].flightsCollection = []
+      @rows[rowNumber-1].bestVariant = null
 
       if row.type is 'city'
         @rows[rowNumber-1].hotelsCollection = []
         @rows[rowNumber-1].showFlightsLoading()
 
+    @rows[rowNumber].bestVariant = null
     @rows[rowNumber].showFlightsLoading()
     @rows[rowNumber].showHotelsLoading()
 
@@ -427,8 +517,8 @@ class SearchRowCollection
 
 class SocketSERP
   constructor: (funcs) ->
-    @socket = io.connect 'http://localhost/'
-    #@socket = io.connect 'http://78.46.187.179/'
+    #@socket = io.connect 'http://localhost/'
+    @socket = io.connect 'http://78.46.187.179/'
     
     @socket.on 'hotels ready', (data) ->
       funcs.onHotelsReady data
@@ -442,34 +532,6 @@ class SocketSERP
       extra: extra
       signature: signature
 
-# helpers
-pluralize = (number, a, b, c) ->
-  if number >= 10 and number <= 20
-    return a
-
-  if number == 1 or number % 10 == 1
-    return b
-
-  if number <= 4 or number % 10 == 4
-    return c
-
-  return a
-
-delay = (ms, func) -> 
-  setTimeout func, ms
-
-addCommas = (nStr) ->
-  nStr += ''
-  x = nStr.split('.')
-  x1 = x[0]
-  if x.length > 1
-    x2 = ('.' + x[1])
-  else
-    x2 = ''
-  rgx = /(\d+)(\d{3})/
-  while (rgx.test(x1)) 
-    x1 = x1.replace(rgx, '$1' + ' ' + '$2')
-  return (x1 + x2)
 
 jQuery(document).ready ->
   main()

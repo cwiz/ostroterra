@@ -245,7 +245,7 @@
                     stars: stars,
                     price: price,
                     rating: rating,
-                    url: 'http://ostrovok.ru' + hotel.url + "&utm_source=ostroterra"
+                    url: 'http://ostrovok.ru' + hotel.url + "&partner_slug=ostroterra"
                   });
                 }
               }
@@ -290,6 +290,9 @@
                 utcArrivalDate = arrivalDestinationDate.clone().subtract('hours', arrivalAirport.timezone);
                 utcDepartureDate = departureOriginDate.clone().subtract('hours', departureAirport.timezone);
                 flightTimeSpan = utcArrivalDate.diff(utcDepartureDate, 'hours');
+                if (flightTimeSpan === 0) {
+                  flightTimeSpan = 1;
+                }
                 new_flights.push({
                   arrival: arrivalDestinationDate.format('LL'),
                   departure: departureOriginDate.format('LL'),
