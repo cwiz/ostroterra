@@ -7027,45 +7027,34 @@ div.wijmo-wijmenu .wijmo-wijmenu-child .wijmo-wijmenu-text
 
 
 body {
-	font-family: 'Open Sans', sans-serif;
 	background: url('/img/bg-pizdato.jpeg');
 	background-attachment: fixed;
 	background-size: cover;
+	font-family: 'Open Sans', sans-serif;
 }
 
 #ads {
-	left: 975px;
-	top: 68px;
-	display: none;
 	position: absolute;
+	top: 68px;
+	left: 975px;
+	display: none;
 }
 
-/*
-.container {
-	margin-left: 15px;
-	margin-right: 15px;
-}
-
-
-.navbar-inner .container {
-	width: auto;
-}
-*/
 
 #navbar {
 	display: none;
 }
 
-.navbar .brand {
-	font-size: 40px;
-	font-weight: normal;
-	color: #fff;	
+.navbar .brand {	
 	float: left;
-	text-shadow: 0px 1px 1px black;
-	padding: 0;
 	margin: 0;
-	line-height: 50px;
+	padding: 0;
+	color: #fff;
 	text-transform: lowercase;
+	text-shadow: 0px 1px 1px black;
+	font-weight: normal;
+	font-size: 40px;
+	line-height: 50px;
 }
 
 .ul-autocomplete .ui-menu-item{
@@ -7082,9 +7071,9 @@ body {
 }
 
 .navbar-inner {
-	background: #333;
 	height: 55px;
 	border: 2px solid rgba(0, 0, 0, 0.4);
+	background: #333;
 }
 
 .dest-item {
@@ -7107,13 +7096,13 @@ body {
 }
 
 .dest-item .image {
+	overflow: hidden;
+	background: rgba(0, 0, 0, 0.2);
+	background-size: cover;
+	color: #000;
+	text-align: center;
 	font-weight: bold;
 	font-style: italic;
-	color: #000;
-	background: rgba(0, 0, 0, 0.2);
-	text-align: center;
-	overflow: hidden;
-	background-size: cover;
 }
 
 input.geo_autocomplete {
@@ -7121,19 +7110,19 @@ input.geo_autocomplete {
 }
 
 input.calendar, input.geo_autocomplete {
-	background-color: #6D3353;
-	color: #fff;
-	border: none;
-	font-size: 25px;
 	height: 40px;
-	color: #fff;
-	box-shadow: none;
+	border: none;
 	border: dashed 0px #000;
 	border-radius: 0;
+	background-color: #6D3353;
 
 	-webkit-box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1);
 	-moz-box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1);
+	box-shadow: none;
 	box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1);
+	color: #fff;
+	color: #fff;
+	font-size: 25px;
 }
 
 input.calendar:hover, input.geo_autocomplete:hover {
@@ -7149,14 +7138,14 @@ input.calendar:hover, input.geo_autocomplete:hover {
 
 .descriptor {
 	position: absolute;
+	z-index: 10;
+	display: none;
+	padding-top: 10px;
+	padding-right: 10px;
+	padding-bottom: 20px;
+	background-color: #000;
 	color: #fff;
 	font-size: 50px;
-	z-index: 10;
-	background-color: #000;
-	padding-top: 10px;
-	padding-bottom: 20px;
-	padding-right: 10px;
-	display: none;
 }
 
 .results {
@@ -7166,9 +7155,9 @@ input.calendar:hover, input.geo_autocomplete:hover {
 }
 
 #ui-datepicker-div {
-	background-color: #000;
-	border-radius: 0;
 	width: 214px;
+	border-radius: 0;
+	background-color: #000;
 }
 
 .footer {
@@ -7180,12 +7169,12 @@ input.calendar:hover, input.geo_autocomplete:hover {
 }
 
 .match {
-	height: 68px;
 	overflow: hidden;
 	padding: 0;
+	height: 68px;
 	background: #fff;
-	color: #222;
 	box-shadow:  0px 0px 1px 1px rgba(0, 0, 10, 0.3);
+	color: #222;
 }
 
 .match .timespan {
@@ -7202,17 +7191,17 @@ input.calendar:hover, input.geo_autocomplete:hover {
 }
 
 .match .hotel {
-	font-size: 1.2em;
 	font-weight: 100;
+	font-size: 1.2em;
 	line-height: 1.2em;
 }
 
 .match .room {
+	overflow: hidden;
+	height: 10px;
+	font-weight: normal;
 	font-size: 10px;
 	line-height: 10px;
-	font-weight: normal;
-	height: 10px;
-	overflow: hidden;
 }
 
 .stars {
@@ -7227,64 +7216,65 @@ input.calendar:hover, input.geo_autocomplete:hover {
 }
 
 input.navbarInput {
-	font-size: 25px;
-	height: 30px;
-	border: none;
-	background-color: #ddd;
-	color: #333;
-	border-radius: 0;
 	margin: 0;
 	margin-top: 9px;
+	height: 30px;
+	border: none;
+	border-radius: 0;
 
 	border-radius: 0;
+	background-color: #ddd;
 	-webkit-box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1);
 	-moz-box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1);
 	box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1);
+	color: #333;
+	font-size: 25px;
+
 }
 
 .navbar span.add-on {
+	margin: 0;
 	height: 29px;
 	background-color: #666;
-	margin: 0;
 }
 
 .match .centered {
 	display: table-cell;
-	vertical-align: middle;
 	height: 56px;
+	vertical-align: middle;
 }
 
 .match .description {
 	display: table-cell;
-	vertical-align: middle;
-	height: 67px;
 	padding-left: 3px;
+	height: 67px;
+	vertical-align: middle;
 }
 
 .hello {
-	text-shadow: 0px 1px 1px #000;
-	height: 270px;
 	display: table-cell;
-	vertical-align: middle;
+	height: 270px;
 	color: #ccc;
+	vertical-align: middle;
+	text-shadow: 0px 1px 1px #000;
 }
 
 .hello p.text {
+	text-align: left;
 	font-size: 20px;
 	line-height: 20px;
-	text-align: left;
 }
 
 .hello p.promo{
+	text-align: left;
 	font-size: 50px;
 	line-height: 50px;
-	text-align: left;
 }
 
 .hello h1 {
+	text-align: left;
 	font-size: 50px;
 	line-height: 50px;
-	text-align: left;
 }
 
 .price {
@@ -7292,35 +7282,35 @@ input.navbarInput {
 }
 
 ::-webkit-input-placeholder {
+   height: 40px;
    color: #ddd;
-   font-family: 'Open Sans', sans-serif;
+   text-align: center;
    font-weight: 300;
    font-size: 20px;
+   font-family: 'Open Sans', sans-serif;
    line-height: 30px;
-   height: 40px;
-   text-align: center;
 }
 
-:-moz-placeholder {  
+:-moz-placeholder {
+   height: 40px;  
    color: #ddd;
-   font-family: 'Open Sans', sans-serif;
+   text-align: center;
    font-weight: 300;
    font-size: 20px;
+   font-family: 'Open Sans', sans-serif;
    line-height: 40px;
-   height: 40px;
-   text-align: center;
 }
 
 #addItem {
 	color: #fff;
+	text-align: center;
 	font-size: 150px;
 	line-height: 50px;
-	text-align: center;
 }
 
 .plus {
-	border: 2px dashed #444;
 	display: none;
+	border: 2px dashed #444;
 }
 
 .plus p:hover {
@@ -7338,19 +7328,19 @@ input.navbarInput {
 }
 
 .stats {
-	height: 150px;
 	width: 100%;
+	height: 150px;
 }
 
 .stats p {
-	color: white;
-	font-size: 35px;
-	line-height: 25px;
-	font-family: 'Open Sans', sans-serif;
-	font-weight: 300;
 	margin: 0;
 	padding: 0;
+	color: white;
 	text-shadow: 0px 1px 1px black;
+	font-weight: 300;
+	font-size: 35px;
+	font-family: 'Open Sans', sans-serif;
+	line-height: 25px;
 }
 
 #teaser {
@@ -7358,27 +7348,29 @@ input.navbarInput {
 }
 
 .teaser h1 {
+	margin: 0;
+	margin-top: -25px;
+	padding: 0;
 	font-size: 100px;
 	line-height: 100px;
-	margin: 0;
-	padding: 0;
-	margin-top: -25px;
 }
 
 .teaser {
+	position: absolute;
+	padding-right: 20px;
 	color: #ddd;
-	font-family: 'Open Sans', sans-serif;
+	text-align: center;
+	text-shadow: 0px 1px 1px black;
 	font-weight: 300;
 	font-style: normal;
-	text-shadow: 0px 1px 1px black;
-	text-align: center;
+	font-family: 'Open Sans', sans-serif;
 }
 
 .teaser p, .teaser ul li {
-	font-size: 30px;
-	line-height: 30px;
 	color: #000;
 	text-shadow: 0px 1px 1px rgba(255, 255, 255, 0.5);
+	font-size: 30px;
+	line-height: 30px;
 } 
 
 .teaser ul li {
@@ -7389,10 +7381,10 @@ input.navbarInput {
 /* loading animation */
 
 .center {
+	overflow: hidden;
 	padding-top: 120px;
 	width: 100%;
 	vertical-align: middle;
-	overflow: hidden;
 	text-align: center;
 }
 
@@ -7401,13 +7393,13 @@ input.navbarInput {
 }
 
 .desc {
-	font-size: 20px;
-	line-height: 55px;
 	color: #fff;
-
-	font-family: 'Open Sans', sans-serif;
 	text-shadow: 0px 1px 1px #000;
 	font-weight: 100;
+	font-size: 20px;
+
+	font-family: 'Open Sans', sans-serif;
+	line-height: 55px;
 }
 
 .floatRight {
@@ -7423,13 +7415,13 @@ input.navbarInput {
 }
 
 ul.nav li.links, ul.nav li.links a {
-	font-size: 20px;
-	line-height: 55px;
-	height: 55px;
 	padding: 0;
+	height: 55px;
 
 	color: #A774C0;
 	font-weight: 100;
+	font-size: 20px;
+	line-height: 55px;
 }
 
 ul.nav li.links a:hover {
@@ -7447,9 +7439,9 @@ ul.nav li.links a:hover {
 }
 
 textarea:focus, input[type="text"]:focus, input[type="password"]:focus, input[type="datetime"]:focus, input[type="datetime-local"]:focus, input[type="date"]:focus, input[type="month"]:focus, input[type="time"]:focus, input[type="week"]:focus, input[type="number"]:focus, input[type="email"]:focus, input[type="url"]:focus, input[type="search"]:focus, input[type="tel"]:focus, input[type="color"]:focus, .uneditable-input:focus {
-	border-color: rgba(82, 168, 236, 0.8);
 	outline: 0;
 	outline: thin dotted 9;
+	border-color: rgba(82, 168, 236, 0.8);
 	-webkit-box-shadow: none;
 	-moz-box-shadow: none;
 	box-shadow: none;
@@ -7462,36 +7454,36 @@ textarea:focus, input[type="text"]:focus, input[type="password"]:focus, input[ty
 .inner-stats h1 {
 	margin: 0;
 	padding: 0;
-	line-height: 20px;
-	font-size: 20px;
 	color: black;
-	font-weight: 300;
 	text-shadow: 0 1px 1px rgba(255, 255, 255, 0.5);
+	font-weight: 300;
+	font-size: 20px;
+	line-height: 20px;
 }
 
 .inner-stats span.cheep, .inner-stats span.average, .inner-stats span.bestValue, .inner-stats  span.best {
 }
 
 .coolStory {
-	font-family: 'Open Sans' !important;
+	margin-top: 10px;
+	color: #fff;
+	text-shadow: 0px 1px 1px black;
 	font-weight: 300;
 	font-style: normal;
-	color: #fff;
-	margin-top: 10px;
-	text-shadow: 0px 1px 1px black;
+	font-family: 'Open Sans' !important;
 }
 
 .coolStory p {
+	padding-top: 10px;
 	font-size: 30px;
 	line-height: 35px;
-	padding-top: 10px;
 }
 
 .coolStory li {
+	margin-right: -20px;
+	margin-left: -20px;
 	font-size: 30px;
 	line-height: 35px;
-	margin-left: -20px;
-	margin-right: -20px;
 }
 
 .bestValueMatch {
@@ -7503,34 +7495,34 @@ ul.nav li.links a {
 }
 
 .ball {
-	background-color: rgba(0,0,0,0);
-	border:5px solid rgba(0,183,229,0.9);
-	opacity:.9;
-	border-top:5px solid rgba(0,0,0,0);
-	border-left:5px solid rgba(0,0,0,0);
-	border-radius:50px;
-	box-shadow: 0 0 35px #2187e7;
+	margin:0 auto;
 	width:50px;
 	height:50px;
-	margin:0 auto;
-	-moz-animation:spin .5s infinite linear;
-	-webkit-animation:spin .5s infinite linear;
-}
-.ball1 {
-	background-color: rgba(0,0,0,0);
 	border:5px solid rgba(0,183,229,0.9);
-	opacity:.9;
 	border-top:5px solid rgba(0,0,0,0);
 	border-left:5px solid rgba(0,0,0,0);
 	border-radius:50px;
-	box-shadow: 0 0 15px #2187e7; 
-	width:30px;
-	height:30px;
-	margin:0 auto;
+	background-color: rgba(0,0,0,0);
+	box-shadow: 0 0 35px #2187e7;
+	opacity:.9;
+	-webkit-animation:spin .5s infinite linear;
+	-moz-animation:spin .5s infinite linear;
+}
+.ball1 {
 	position:relative;
 	top:-50px;
-	-moz-animation:spinoff .5s infinite linear;
+	margin:0 auto; 
+	width:30px;
+	height:30px;
+	border:5px solid rgba(0,183,229,0.9);
+	border-top:5px solid rgba(0,0,0,0);
+	border-left:5px solid rgba(0,0,0,0);
+	border-radius:50px;
+	background-color: rgba(0,0,0,0);
+	box-shadow: 0 0 15px #2187e7;
+	opacity:.9;
 	-webkit-animation:spinoff .5s infinite linear;
+	-moz-animation:spinoff .5s infinite linear;
 }
 @-moz-keyframes spin {
 	0% { -moz-transform:rotate(0deg); }

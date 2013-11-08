@@ -16,12 +16,7 @@ serpRows = null
 
 main = () ->
 
-  # show/hide navbar 
-
-
-  
   # defaults
-
   $.datepicker.setDefaults $.datepicker.regional["ru"]
 
   serp = new SocketSERP 
@@ -518,16 +513,16 @@ class SearchRowCollection
 class SocketSERP
   constructor: (funcs) ->
     #@socket = io.connect 'http://localhost/'
-    @socket = io.connect 'http://78.46.187.179/'
+    @socket   = io.connect 'http://ostroterra.com:1488/'
     
-    @socket.on 'hotels ready', (data) ->
+    @socket.on 'hotels_ready',  (data) ->
       funcs.onHotelsReady data
 
-    @socket.on 'flights ready', (data) ->
+    @socket.on 'flights_ready', (data) ->
       funcs.onFlightsReady data
 
   startSearch: (rows, extra, signature) ->
-    @socket.emit 'start search'
+    @socket.emit 'start_search'
       rows: rows
       extra: extra
       signature: signature

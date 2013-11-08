@@ -519,16 +519,16 @@
   })();
   SocketSERP = (function() {
     function SocketSERP(funcs) {
-      this.socket = io.connect('http://78.46.187.179/');
-      this.socket.on('hotels ready', function(data) {
+      this.socket = io.connect('http://ostroterra.com:1488/');
+      this.socket.on('hotels_ready', function(data) {
         return funcs.onHotelsReady(data);
       });
-      this.socket.on('flights ready', function(data) {
+      this.socket.on('flights_ready', function(data) {
         return funcs.onFlightsReady(data);
       });
     }
     SocketSERP.prototype.startSearch = function(rows, extra, signature) {
-      return this.socket.emit('start search', {
+      return this.socket.emit('start_search', {
         rows: rows,
         extra: extra,
         signature: signature

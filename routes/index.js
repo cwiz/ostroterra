@@ -1,14 +1,15 @@
-(function() {
-  var api, static;
+(function(){
+  var api, search, staticPages;
   api = require("./api.js");
-  static = require("./static.js");
-  exports.index = function(req, res) {
+  search = require("./search.js");
+  staticPages = require("./static.js");
+  exports.index = function(req, res){
     return res.render("index", {
       title: "Index Page"
     });
   };
   exports.autocomplete = api.autocomplete;
-  exports.search = api.search;
+  exports.search = search.search;
   exports.image = api.image;
-  exports.about = static.about;
+  exports.about = staticPages.about;
 }).call(this);

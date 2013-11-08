@@ -1,5 +1,5 @@
-(function() {
-  exports.about = function(req, res) {
+(function(){
+  exports.about = function(req, res){
     return res.render("about", {
       title: 'about page'
     });

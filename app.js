@@ -10,8 +10,9 @@ var express = require('express')
 // Globals
 
 var app     = express();
-var server  = http.createServer(app)
-var io      = socket.listen(server)
+var server  = http.createServer(app);
+var io      = socket.listen(server);
+var io      = socket.listen(1488);
 
 // Configuration
 
@@ -31,6 +32,10 @@ app.configure(function(){
 app.configure('development', function(){
   app.use(express.errorHandler());
 });
+
+// app.configure('production', function(){
+//   app.use(express.errorHandler());
+// });
 
 // Routes
 
